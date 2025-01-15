@@ -30,6 +30,8 @@ namespace HellDiver.Data
 			}
 		}
 
+		public const int StratagemCount = 4;
+
 		async Task<GameObject> IMaster.BuildObject()
 		{
 			var master = (await LoadAsset<GameObject>("RoR2/Base/Merc/MercMonsterMaster.prefab"))!.InstantiateClone(
@@ -87,7 +89,7 @@ namespace HellDiver.Data
 			weaponStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
 			weaponStateMachine.mainStateType = weaponStateMachine.initialStateType;
 			stateMachines.Add(weaponStateMachine);
-			
+
 			var stratagemStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
 			stratagemStateMachine.customName = "Stratagem";
 			stratagemStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
@@ -141,7 +143,7 @@ namespace HellDiver.Data
 			#region Stratagems
 
 			var stratagemFamily = await GetSkillFamily<StratagemFamily>();
-			for (var i = 0; i < 4; i++)
+			for (var i = 0; i < StratagemCount; i++)
 			{
 				var skill = bodyPrefab.AddComponent<GenericSkill>();
 				skill.skillName = "Stratagem" + i;

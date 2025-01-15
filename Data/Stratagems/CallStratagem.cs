@@ -55,10 +55,9 @@ namespace HellDiver.Data.Stratagems
 			base.OnExit();
 			if (!isAuthority) return;
 
-			foreach (var slot in _hellDiverBehavior.stratagemSkills)
+			foreach (var (slot, stratagem) in _hellDiverBehavior.stratagemSkills)
 			{
-				if (!Concentric.TryGetAssetFromObject(slot.skillDef, out Stratagem stratagem) ||
-				    !stratagem.inputs.SequenceEqual(dialedInputs)) continue;
+				if (!stratagem.inputs.SequenceEqual(dialedInputs)) continue;
 				slot.ExecuteIfReady();
 				return;
 			}
