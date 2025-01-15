@@ -1,0 +1,12 @@
+{
+  "strings": {
+    "BUB_STRATAGEM_DIALING_NAME": "Dialing",
+    "BUB_STRATAGEM_DIALING_DESC": "Hold down and start dialing.",
+    
+    "BUB_STRATAGEM_EAGLE_500KG_NAME": "Eagle: 500kg Bomb",
+    "BUB_STRATAGEM_EAGLE_500KG_DESC": "",
+    
+    "BUB_STRATAGEM_RAIL_CANNON_NAME": "Orbital Rail Cannon",
+    "BUB_STRATAGEM_RAIL_CANNON_DESC": ""
+  }
+}
