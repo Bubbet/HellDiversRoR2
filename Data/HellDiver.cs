@@ -5,13 +5,14 @@ using HellDiver.Data.Grenades;
 using HellDiver.Data.Primary;
 using HellDiver.Data.Secondary;
 using HellDiver.Data.Stratagems;
+using HelldiverCaptain;
 using RoR2;
 using UnityEngine;
 using R2API;
 
 namespace HellDiver.Data
 {
-	public class HellDiver : Concentric, IMaster, IBody, ISurvivor
+	public class HellDiver : Concentric, IMaster, IBody, ISurvivor, IModel, IBodyDisplay, ISkin
 	{
 		private static int? _firstStratagemSlot;
 
@@ -23,7 +24,8 @@ namespace HellDiver.Data
 
 				var body = GetBody<HellDiver>().Result;
 				_firstStratagemSlot = body.GetComponents<GenericSkill>().TakeWhile(x =>
-					!TryGetAssetFromObject(x.skillFamily.defaultSkillDef, out Concentric asset) || asset is not Stratagem).Count();
+					!TryGetAssetFromObject(x.skillFamily.defaultSkillDef, out Concentric asset) ||
+					asset is not Stratagem).Count();
 				return _firstStratagemSlot.Value;
 			}
 		}
@@ -49,8 +51,8 @@ namespace HellDiver.Data
 			var bodyHealthComponent = bodyPrefab.GetComponent<HealthComponent>();
 			var hellDiverComponent = bodyPrefab.AddComponent<HellDiverBehavior>();
 
-			/*
 			#region Setup Model
+
 			var model = await this.GetModel();
 
 			var bodyHurtBoxGroup = model.GetComponentInChildren<HurtBoxGroup>();
@@ -64,10 +66,8 @@ namespace HellDiver.Data
 			model.transform.parent = bodyModelLocator.modelBaseTransform;
 			model.GetComponent<CharacterModel>().body = bodyComponent;
 			bodyModelLocator.modelTransform = model.transform;
-			//bodyHealthComponent.modelLocator = bodyModelLocator; this isnt even serialized by unity, so its not set in the prefab either
 
 			#endregion
-			*/
 
 			var stateMachines = new List<EntityStateMachine>();
 
@@ -138,7 +138,7 @@ namespace HellDiver.Data
 			    Chainloader.PluginInfos.ContainsKey(ExtraSkillSlotsPlugin.GUID))
 			{
 				await SetupExtraSkillSlots(bodyPrefab);
-							
+
 				var stratagemDialingStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
 				stratagemDialingStateMachine.customName = "Dialing";
 				stratagemDialingStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
@@ -204,9 +204,59 @@ namespace HellDiver.Data
 			survivor.mainEndingEscapeFailureFlavorToken = DevPrefix + "HELLDIVER_OUTRO_FAILURE";
 			survivor.desiredSortPosition = 100f;
 
+			survivor.displayPrefab = await this.GetBodyDisplay();
 			survivor.bodyPrefab = await this.GetBody();
 
 			return survivor;
+		}
+
+		async Task<GameObject> IBodyDisplay.BuildObject()
+		{
+			var model = await this.GetModel();
+			var displayModel = model.InstantiateClone("HellDiverDisplayDisplay", false);
+			return displayModel;
+		}
+
+		async Task<GameObject> IModel.BuildObject()
+		{
+			var model = (await LoadAsset<GameObject>("RoR2/Base/Captain/CaptainBody.prefab")).transform
+				.Find("ModelBase/mdlCaptain").gameObject.InstantiateClone("mdlHellDiver", false);
+			var mesh = HelldiverCaptainPlugin.assetBundle.LoadAsset<Mesh>(
+				"Assets\\SkinMods\\HelldiverCaptain\\Meshes\\Helldiver.mesh");
+
+			var modelComponent = model.GetComponent<CharacterModel>();
+			var firstInfo = modelComponent.baseRendererInfos[0];
+			((SkinnedMeshRenderer)firstInfo.renderer).sharedMesh = mesh;
+			
+			for (var i = 1; i < modelComponent.baseRendererInfos.Length; i++)
+			{
+				UnityEngine.Object.Destroy(modelComponent.baseRendererInfos[i].renderer.gameObject);
+			}
+
+			modelComponent.baseRendererInfos = new[] { firstInfo };
+
+			return model;
+		}
+
+		IEnumerable<Concentric> IModel.GetSkins() => new []{this};
+		
+		async Task<SkinDef> ISkin.BuildObject()
+		{
+			var model = await this.GetModel();
+			return (SkinDef)ScriptableObject.CreateInstance(typeof(SkinDef), obj =>
+			{
+				var skinDef = (SkinDef)obj;
+				ISkin.AddDefaults(ref skinDef);
+				skinDef.name = "HellDiverDefaultSkinDef";
+				skinDef.nameToken = DevPrefix + "HELLDIVER_DEFAULT_SKIN_NAME";
+				//skinDef.icon = icon;
+
+				skinDef.rootObject = model;
+				var modelRendererInfos = model.GetComponent<CharacterModel>().baseRendererInfos;
+				var rendererInfos = new CharacterModel.RendererInfo[modelRendererInfos.Length];
+				modelRendererInfos.CopyTo(rendererInfos, 0);
+				skinDef.rendererInfos = rendererInfos;
+			});
 		}
 	}
 }

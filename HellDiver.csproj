@@ -11,7 +11,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
         <PackageReference Include="BepInEx.Core" Version="5.4.19" />
+        <PackageReference Include="Necrofearfire-Helldiver_Captain" Version="1.0.0" Publicize="true"/>
         <PackageReference Include="RiskofThunder-R2API_Prefab" Version="1.0.4" />
         <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
         <PackageReference Include="KingEnderBrine-ExtraSkillSlots" Version="1.6.1" />
@@ -32,7 +34,6 @@
     </ItemGroup>
 
     <ItemGroup Condition="Exists($(RoR2Folder))">
-        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
         <Reference Include="RoR2" Publicize="true">
             <HintPath>$(RoR2Folder)RoR2.dll</HintPath>
         </Reference>
