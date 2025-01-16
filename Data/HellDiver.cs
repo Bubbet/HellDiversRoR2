@@ -5,7 +5,6 @@ using HellDiver.Data.Grenades;
 using HellDiver.Data.Primary;
 using HellDiver.Data.Secondary;
 using HellDiver.Data.Stratagems;
-using Newtonsoft.Json.Utilities;
 using RoR2;
 using UnityEngine;
 using R2API;
@@ -23,12 +22,13 @@ namespace HellDiver.Data
 				if (_firstStratagemSlot != null) return _firstStratagemSlot.Value;
 
 				var body = GetBody<HellDiver>().Result;
-				_firstStratagemSlot = body.GetComponents<GenericSkill>().IndexOf(x =>
-					TryGetAssetFromObject(x.skillFamily.defaultSkillDef, out Concentric asset) &&
-					asset is Stratagem);
+				_firstStratagemSlot = body.GetComponents<GenericSkill>().TakeWhile(x =>
+					!TryGetAssetFromObject(x.skillFamily.defaultSkillDef, out Concentric asset) || asset is not Stratagem).Count();
 				return _firstStratagemSlot.Value;
 			}
 		}
+
+		public static List<GenericSkill> stratagemSkills = new List<GenericSkill>();
 
 		public const int StratagemCount = 4;
 
@@ -98,7 +98,7 @@ namespace HellDiver.Data
 
 			var deathBehaviour = bodyPrefab.GetOrAddComponent<CharacterDeathBehavior>();
 			deathBehaviour.deathStateMachine = bodyStateMachine;
-			deathBehaviour.idleStateMachine = new[] { weaponStateMachine };
+			deathBehaviour.idleStateMachine = new[] { weaponStateMachine, stratagemStateMachine };
 
 			#endregion
 
@@ -138,6 +138,12 @@ namespace HellDiver.Data
 			    Chainloader.PluginInfos.ContainsKey(ExtraSkillSlotsPlugin.GUID))
 			{
 				await SetupExtraSkillSlots(bodyPrefab);
+							
+				var stratagemDialingStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
+				stratagemDialingStateMachine.customName = "Dialing";
+				stratagemDialingStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
+				stratagemDialingStateMachine.mainStateType = stratagemDialingStateMachine.initialStateType;
+				stateMachines.Add(stratagemDialingStateMachine);
 			}
 
 			#region Stratagems
@@ -148,6 +154,7 @@ namespace HellDiver.Data
 				var skill = bodyPrefab.AddComponent<GenericSkill>();
 				skill.skillName = "Stratagem" + i;
 				skill._skillFamily = stratagemFamily;
+				stratagemSkills.Add(skill);
 			}
 
 			#endregion
@@ -172,19 +179,19 @@ namespace HellDiver.Data
 			downSkill.hideInCharacterSelect = true;
 			downSkill.skillName = "Down";
 			downSkill._skillFamily = await GetSkillFamily<DownFamily>();
-			extraSkillLocator.extraFirst = downSkill;
+			extraSkillLocator.extraSecond = downSkill;
 
 			var leftSkill = bodyPrefab.AddComponent<GenericSkill>();
 			leftSkill.hideInCharacterSelect = true;
 			leftSkill.skillName = "Left";
 			leftSkill._skillFamily = await GetSkillFamily<LeftFamily>();
-			extraSkillLocator.extraFirst = leftSkill;
+			extraSkillLocator.extraThird = leftSkill;
 
 			var rightSkill = bodyPrefab.AddComponent<GenericSkill>();
 			rightSkill.hideInCharacterSelect = true;
 			rightSkill.skillName = "Right";
 			rightSkill._skillFamily = await GetSkillFamily<RightFamily>();
-			extraSkillLocator.extraFirst = rightSkill;
+			extraSkillLocator.extraFourth = rightSkill;
 		}
 
 		async Task<SurvivorDef> ISurvivor.BuildObject()

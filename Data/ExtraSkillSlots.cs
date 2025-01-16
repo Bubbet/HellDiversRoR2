@@ -30,6 +30,13 @@ namespace HellDiver.Data
 		Task<SkillDef> ISkill.BuildObject()
 		{
 			var skillDef = ScriptableObject.CreateInstance<SkillDef>();
+			skillDef.mustKeyPress = true;
+			skillDef.baseRechargeInterval = 0f;
+			skillDef.skillName = DevPrefix + "STRATAGEM_DIAL_UP_NAME";
+			skillDef.skillNameToken = DevPrefix + "STRATAGEM_DIAL_UP_NAME";
+			//skill.icon = LoadAsset<Sprite>("");
+			skillDef.skillDescriptionToken = DevPrefix + "STRATAGEM_DIAL_UP_DESC";
+			skillDef.activationStateMachineName = "Dialing";
 			return Task.FromResult(skillDef);
 		}
 
@@ -49,6 +56,13 @@ namespace HellDiver.Data
 		Task<SkillDef> ISkill.BuildObject()
 		{
 			var skillDef = ScriptableObject.CreateInstance<SkillDef>();
+			skillDef.mustKeyPress = true;
+			skillDef.baseRechargeInterval = 0f;
+			skillDef.skillName = DevPrefix + "STRATAGEM_DIAL_DOWN_NAME";
+			skillDef.skillNameToken = DevPrefix + "STRATAGEM_DIAL_DOWN_NAME";
+			//skill.icon = LoadAsset<Sprite>("");
+			skillDef.skillDescriptionToken = DevPrefix + "STRATAGEM_DIAL_DOWN_DESC";
+			skillDef.activationStateMachineName = "Dialing";
 			return Task.FromResult(skillDef);
 		}
 
@@ -68,6 +82,13 @@ namespace HellDiver.Data
 		Task<SkillDef> ISkill.BuildObject()
 		{
 			var skillDef = ScriptableObject.CreateInstance<SkillDef>();
+			skillDef.mustKeyPress = true;
+			skillDef.baseRechargeInterval = 0f;
+			skillDef.skillName = DevPrefix + "STRATAGEM_DIAL_LEFT_NAME";
+			skillDef.skillNameToken = DevPrefix + "STRATAGEM_DIAL_LEFT_NAME";
+			//skill.icon = LoadAsset<Sprite>("");
+			skillDef.skillDescriptionToken = DevPrefix + "STRATAGEM_DIAL_LEFT_DESC";
+			skillDef.activationStateMachineName = "Dialing";
 			return Task.FromResult(skillDef);
 		}
 
@@ -87,6 +108,13 @@ namespace HellDiver.Data
 		Task<SkillDef> ISkill.BuildObject()
 		{
 			var skillDef = ScriptableObject.CreateInstance<SkillDef>();
+			skillDef.mustKeyPress = true;
+			skillDef.baseRechargeInterval = 0f;
+			skillDef.skillName = DevPrefix + "STRATAGEM_DIAL_RIGHT_NAME";
+			skillDef.skillNameToken = DevPrefix + "STRATAGEM_DIAL_RIGHT_NAME";
+			//skill.icon = LoadAsset<Sprite>("");
+			skillDef.skillDescriptionToken = DevPrefix + "STRATAGEM_DIAL_RIGHT_DESC";
+			skillDef.activationStateMachineName = "Dialing";
 			return Task.FromResult(skillDef);
 		}
 

@@ -103,12 +103,14 @@ namespace HellDiver.Data.Stratagems
 		Task<SkillDef> ISkill.BuildObject()
 		{
 			var skillDef = ScriptableObject.CreateInstance<SkillDef>();
+			skillDef.mustKeyPress = true;
+			skillDef.baseRechargeInterval = 0f;
 			//TODO finish skillDef
 			skillDef.skillName = DevPrefix + "STRATAGEM_DIALING_NAME";
 			skillDef.skillNameToken = DevPrefix + "STRATAGEM_DIALING_NAME";
 			//skill.icon = LoadAsset<Sprite>("");
 			skillDef.skillDescriptionToken = DevPrefix + "STRATAGEM_DIALING_DESC";
-			skillDef.activationStateMachineName = "Body";
+			skillDef.activationStateMachineName = useExtraSkillsForStratagemCalling.Value ? "Stratagem" : "Body";
 			return Task.FromResult(skillDef);
 		}
 

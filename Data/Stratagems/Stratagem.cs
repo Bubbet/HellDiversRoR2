@@ -1,6 +1,7 @@
 using HellDiver.Data.Stratagems.Eagle;
 using HellDiver.Data.Stratagems.Orbital;
 using RoR2;
+using RoR2.Skills;
 
 namespace HellDiver.Data.Stratagems
 {
@@ -24,6 +25,10 @@ namespace HellDiver.Data.Stratagems
 			new Stratagem[] { GetAsset<Bomb500kg>(), GetAsset<RailCannon>() };
 
 		public string GetNameToken(GenericSkill skill) => Language.GetStringFormatted("BUB_LOADOUT_STRATAGEM",
-			skill.GetComponents<GenericSkill>().TakeWhile(x => x != skill).Count() + 1 - HellDiver.FirstStratagemSlot);
+			HellDiver.stratagemSkills.TakeWhile(x => x != skill).Count() + 1);
+
+		public string GetViewableNameOverride(GenericSkill skill) =>
+			SkillCatalog.GetSkillFamilyName(skill.skillFamily.catalogIndex) +
+			HellDiver.stratagemSkills.TakeWhile(x => x != skill).Count();
 	}
 }
