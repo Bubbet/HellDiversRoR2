@@ -213,7 +213,7 @@ namespace HellDiver.Data
 		async Task<GameObject> IBodyDisplay.BuildObject()
 		{
 			var model = await this.GetModel();
-			var displayModel = model.InstantiateClone("HellDiverDisplayDisplay", false);
+			var displayModel = model.InstantiateClone("HellDiverDisplay", false);
 			return displayModel;
 		}
 
@@ -230,7 +230,7 @@ namespace HellDiver.Data
 			
 			for (var i = 1; i < modelComponent.baseRendererInfos.Length; i++)
 			{
-				UnityEngine.Object.Destroy(modelComponent.baseRendererInfos[i].renderer.gameObject);
+				UnityEngine.Object.DestroyImmediate(modelComponent.baseRendererInfos[i].renderer.gameObject);
 			}
 
 			modelComponent.baseRendererInfos = new[] { firstInfo };
