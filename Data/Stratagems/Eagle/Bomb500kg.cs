@@ -29,7 +29,7 @@ namespace HellDiver.Data.Stratagems.Eagle
 
 		IEnumerable<Type> ISkill.GetEntityStates() => new[] { typeof(Bomb500kgState) };
 
-		public override IEnumerable<Inputs> inputs =>
+		public override Inputs[] inputs =>
 			new[] { Inputs.Up, Inputs.Right, Inputs.Down, Inputs.Down, Inputs.Down };
 	}
 }

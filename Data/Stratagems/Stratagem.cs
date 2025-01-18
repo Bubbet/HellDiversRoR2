@@ -7,7 +7,7 @@ namespace HellDiver.Data.Stratagems
 {
 	public abstract class Stratagem : Concentric
 	{
-		public abstract IEnumerable<Inputs> inputs { get; }
+		public abstract Inputs[] inputs { get; }
 
 		public enum Inputs
 		{

@@ -83,10 +83,16 @@ namespace HellDiver.Data.Stratagems
 
 		public void Dial(Stratagem.Inputs input)
 		{
-			Util.PlaySound("StratDialSound", gameObject);
-			log.LogInfo("Dialed " + input);
 			dialedInputs.Add(input);
 			_lastDialedInput = input;
+			if (_hellDiverBehavior.stratagemSkills.Any(x => x.stratagem.inputs.SequenceContains(dialedInputs)))
+			{
+				log.LogInfo("Dialed " + input);
+				Util.PlaySound("StratDialSound", gameObject);
+				return;
+			}
+			log.LogInfo("Cleared dialing, invalid sequence.");
+			dialedInputs.Clear();
 		}
 	}
 

@@ -15,7 +15,7 @@ namespace HellDiver.Data.Stratagems.Orbital
 	
 	public class RailCannon : Stratagem, ISkill
 	{
-		public override IEnumerable<Inputs> inputs =>
+		public override Inputs[] inputs =>
 			new[] { Inputs.Right, Inputs.Up, Inputs.Down, Inputs.Down, Inputs.Right };
 
 		Task<SkillDef> ISkill.BuildObject()

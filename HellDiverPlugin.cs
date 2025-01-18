@@ -3,10 +3,14 @@ global using ConcentricContent;
 using BepInEx;
 using BepInEx.Logging;
 using ExtraSkillSlots;
+using HellDiver.Data;
 using RoR2;
 using RoR2.ContentManagement;
+using RoR2.UI;
 using System.Security;
 using System.Security.Permissions;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Path = System.IO.Path;
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -32,11 +36,19 @@ namespace HellDiver
 		public static Dictionary<string, UnityEngine.AssetBundle> bundles =
 			new Dictionary<string, UnityEngine.AssetBundle>();
 
+		public static GameObject vanillaHUD;
+
 		private void Awake()
 		{
 			instance = this;
 			log = Logger;
 
+			Addressables.LoadAssetAsync<GameObject>("RoR2/Base/UI/HUDSimple.prefab").Completed += result =>
+			{
+				vanillaHUD = result.Result;
+				HellDiverHUD.Build(vanillaHUD.GetComponent<HUD>());
+			};
+			
 			var pluginPath = Path.GetDirectoryName(Info.Location) ??
 			                 throw new InvalidOperationException("Failed to find path of plugin.");
 			

@@ -225,6 +225,7 @@ namespace HellDiver.Data
 				"Assets\\SkinMods\\HelldiverCaptain\\Meshes\\Helldiver.mesh");
 
 			var modelComponent = model.GetComponent<CharacterModel>();
+			model.GetComponent<Animator>().SetBool("isGrounded", true);
 			var firstInfo = modelComponent.baseRendererInfos[0];
 			((SkinnedMeshRenderer)firstInfo.renderer).sharedMesh = mesh;
 			
