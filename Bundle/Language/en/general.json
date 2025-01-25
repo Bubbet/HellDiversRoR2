@@ -5,6 +5,13 @@
     "BUB_HELLDIVER_OUTRO_FLAVOR": "",
     "BUB_HELLDIVER_OUTRO_FAILURE": "",
     "BUB_LOADOUT_STRATAGEM": "Stratagem {0}",
-    "BUB_HELLDIVER_DEFAULT_SKIN_NAME": "Default"
+    "BUB_HELLDIVER_DEFAULT_SKIN_NAME": "Default",
+    
+    "BUB_STRATAGEM_ACTIVATING": "Activating",
+    "BUB_STRATAGEM_INBOUND": "Inbound T-{0:00}:{1:00}",
+    "BUB_STRATAGEM_IMPACT": "Impact",
+    "BUB_STRATAGEM_COOLDOWN": "Cooldown T-{0:00}:{1:00}",
+    "BUB_STRATAGEM_READY": "Ready",
+    "BUB_STRATAGEM_UNAVAILABLE": "Unavailable"
   }
 }

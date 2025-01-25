@@ -1,0 +1,108 @@
+ManifestFileVersion: 0
+CRC: 3778261495
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c766493ff2885ae5c0c86773ec5ba4fe
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 021ea3000b10e301c46fa7908e130811
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 992647037, guid: 7cc5eae9695a43244b39c5b0492eb644, type: 3}
+- Class: 114
+  Script: {fileID: 44866093, guid: 7cc5eae9695a43244b39c5b0492eb644, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+- Class: 225
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Character
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphPairAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphValueRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.Glyph
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+Assets:
+- Assets/HellDivers/Materials/TransparentNoOverlap.shader
+- Assets/HellDivers/Icons/StratagemIcons/0xd4dface72e3999f0.tiff
+- Assets/HellDivers/Prefabs/StratagemContainer.prefab
+- Assets/HellDivers/Materials/ChannelExtractorMatTransparentBlack.mat
+- Assets/HellDivers/Fonts/FS Sinclair Regular.otf
+- Assets/HellDivers/Icons/StratagemIcons/0x81bc00dd2ee52bf0.tiff
+- Assets/HellDivers/Icons/StratagemIcons/0x36668e94dd8998e9.tiff
+- Assets/HellDivers/Icons/StratagemIcons/0xb5ce997a53b73bde.tiff
+- Assets/HellDivers/Fonts/swiss-721-bt-black-extended SDF.asset
+- Assets/HellDivers/Icons/StratagemIcons/0x17162b232822fcde.tiff
+- Assets/HellDivers/Fonts/FS Sinclair Regular SDF.asset
+- Assets/HellDivers/Icons/StratagemIcons/0x4215699d6705c2c4.tiff
+- Assets/HellDivers/Prefabs/Row.prefab
+- Assets/HellDivers/Materials/ChannelExtractor.shader
+- Assets/HellDivers/Materials/TransparentNoOverlap.mat
+- Assets/HellDivers/Prefabs/RowOld.prefab
+- Assets/HellDivers/Materials/ChannelExtractGray.mat
+- Assets/HellDivers/Icons/0x71aeb772fac157ef.tiff
+- Assets/HellDivers/Materials/ChannelExtractorMat.mat
+- Assets/HellDivers/Fonts/swiss-721-bt-black-extended.ttf
+Dependencies: []

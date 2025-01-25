@@ -9,10 +9,11 @@ using HelldiverCaptain;
 using RoR2;
 using UnityEngine;
 using R2API;
+using RoR2.Skills;
 
 namespace HellDiver.Data
 {
-	public class HellDiver : Concentric, IMaster, IBody, ISurvivor, IModel, IBodyDisplay, ISkin
+	public class HellDiver : Concentric, IMaster, IBody, ISurvivor, IModel, IBodyDisplay, ISkin, IEntityStates
 	{
 		private static int? _firstStratagemSlot;
 
@@ -80,7 +81,7 @@ namespace HellDiver.Data
 
 			var bodyStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
 			bodyStateMachine.customName = "Body";
-			bodyStateMachine.initialStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
+			bodyStateMachine.initialStateType = new SerializableEntityStateType(typeof(HellDiverMain));
 			bodyStateMachine.mainStateType = bodyStateMachine.initialStateType;
 			stateMachines.Add(bodyStateMachine);
 
@@ -90,15 +91,9 @@ namespace HellDiver.Data
 			weaponStateMachine.mainStateType = weaponStateMachine.initialStateType;
 			stateMachines.Add(weaponStateMachine);
 
-			var stratagemStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
-			stratagemStateMachine.customName = "Stratagem";
-			stratagemStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
-			stratagemStateMachine.mainStateType = stratagemStateMachine.initialStateType;
-			stateMachines.Add(stratagemStateMachine);
-
 			var deathBehaviour = bodyPrefab.GetOrAddComponent<CharacterDeathBehavior>();
 			deathBehaviour.deathStateMachine = bodyStateMachine;
-			deathBehaviour.idleStateMachine = new[] { weaponStateMachine, stratagemStateMachine };
+			deathBehaviour.idleStateMachine = new[] { weaponStateMachine };
 
 			#endregion
 
@@ -151,6 +146,12 @@ namespace HellDiver.Data
 			var stratagemFamily = await GetSkillFamily<StratagemFamily>();
 			for (var i = 0; i < StratagemCount; i++)
 			{
+				var stratagemStateMachine = bodyPrefab.AddComponent<EntityStateMachine>();
+				stratagemStateMachine.customName = "Stratagem" + i;
+				stratagemStateMachine.initialStateType = new SerializableEntityStateType(typeof(Idle));
+				stratagemStateMachine.mainStateType = stratagemStateMachine.initialStateType;
+				stateMachines.Add(stratagemStateMachine);
+
 				var skill = bodyPrefab.AddComponent<GenericSkill>();
 				skill.skillName = "Stratagem" + i;
 				skill._skillFamily = stratagemFamily;
@@ -228,7 +229,7 @@ namespace HellDiver.Data
 			model.GetComponent<Animator>().SetBool("isGrounded", true);
 			var firstInfo = modelComponent.baseRendererInfos[0];
 			((SkinnedMeshRenderer)firstInfo.renderer).sharedMesh = mesh;
-			
+
 			for (var i = 1; i < modelComponent.baseRendererInfos.Length; i++)
 			{
 				UnityEngine.Object.DestroyImmediate(modelComponent.baseRendererInfos[i].renderer.gameObject);
@@ -239,8 +240,8 @@ namespace HellDiver.Data
 			return model;
 		}
 
-		IEnumerable<Concentric> IModel.GetSkins() => new []{this};
-		
+		IEnumerable<Concentric> IModel.GetSkins() => new[] { this };
+
 		async Task<SkinDef> ISkin.BuildObject()
 		{
 			var model = await this.GetModel();
@@ -258,6 +259,35 @@ namespace HellDiver.Data
 				modelRendererInfos.CopyTo(rendererInfos, 0);
 				skinDef.rendererInfos = rendererInfos;
 			});
+		}
+
+		IEnumerable<Type> IEntityStates.GetEntityStates() => new[] { typeof(HellDiverMain) };
+	}
+
+	public class HellDiverMain : GenericCharacterMain
+	{
+		public static List<GameObject> subscribedBodies = new List<GameObject>();
+
+		public override void OnEnter()
+		{
+			base.OnEnter();
+
+
+			if (subscribedBodies.Contains(gameObject)) return;
+			foreach (var skill in skillLocator.allSkills.Skip(HellDiver.FirstStratagemSlot)
+				         .Take(HellDiver.StratagemCount))
+			{
+				skill.customStateMachineResolver +=
+					ResolveStratagemStates;
+			}
+
+			subscribedBodies.Add(gameObject);
+		}
+
+		// ReSharper disable once RedundantAssignment
+		public static void ResolveStratagemStates(GenericSkill genericSkill, SkillDef _, ref EntityStateMachine machine)
+		{
+			machine = EntityStateMachine.FindByCustomName(genericSkill.gameObject, genericSkill.skillName);
 		}
 	}
 }

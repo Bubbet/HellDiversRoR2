@@ -3,10 +3,9 @@ global using ConcentricContent;
 using BepInEx;
 using BepInEx.Logging;
 using ExtraSkillSlots;
-using HellDiver.Data;
+using HarmonyLib;
 using RoR2;
 using RoR2.ContentManagement;
-using RoR2.UI;
 using System.Security;
 using System.Security.Permissions;
 using UnityEngine;
@@ -33,22 +32,15 @@ namespace HellDiver
 
 		public const string DevPrefix = "BUB_";
 
-		public static Dictionary<string, UnityEngine.AssetBundle> bundles =
-			new Dictionary<string, UnityEngine.AssetBundle>();
-
-		public static GameObject vanillaHUD;
+		public static Dictionary<string, AssetBundle> bundles =
+			new Dictionary<string, AssetBundle>();
 
 		private void Awake()
 		{
 			instance = this;
 			log = Logger;
+			new Harmony(Info.Metadata.GUID).PatchAll();
 
-			Addressables.LoadAssetAsync<GameObject>("RoR2/Base/UI/HUDSimple.prefab").Completed += result =>
-			{
-				vanillaHUD = result.Result;
-				HellDiverHUD.Build(vanillaHUD.GetComponent<HUD>());
-			};
-			
 			var pluginPath = Path.GetDirectoryName(Info.Location) ??
 			                 throw new InvalidOperationException("Failed to find path of plugin.");
 			
@@ -61,26 +53,32 @@ namespace HellDiver
 				var bundlePaths = Directory.EnumerateFiles(assetsPath).Where(x => !x.EndsWith("manifest")).ToArray();
 				foreach (var path in bundlePaths)
 				{
-					UnityEngine.AssetBundle.LoadFromFileAsync(path).completed += operation =>
+					AssetBundle.LoadFromFileAsync(path).completed += operation =>
 					{
-						bundles[Path.GetFileName(path)] = ((UnityEngine.AssetBundleCreateRequest)operation).assetBundle;
+						bundles[Path.GetFileName(path)] = ((AssetBundleCreateRequest)operation).assetBundle;
 						if (bundles.Count != bundlePaths.Length) return;
-						ContentPackProvider.Init();
+						Init();
 					};
 				}
-				if (bundlePaths.Length == 0) ContentPackProvider.Init();
+				if (bundlePaths.Length == 0) Init();
 			}
 			else
 			{
-				ContentPackProvider.Init();
+				Init();
 			}
+			
+		}
+
+		public void Init()
+		{
+			ContentPackProvider.Init();
 		}
 
 		public static Task<T> LoadAsset<T>(string assetPath) where T : UnityEngine.Object
 		{
 			if (assetPath.StartsWith("addressable:"))
 			{
-				return UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..])
+				return Addressables.LoadAssetAsync<T>(assetPath["addressable:".Length..])
 					.Task;
 			}
 
@@ -90,7 +88,7 @@ namespace HellDiver
 			}
 
 			var colinIndex = assetPath.IndexOf(":", StringComparison.Ordinal);
-			if (colinIndex <= 0) return UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<T>(assetPath).Task;
+			if (colinIndex <= 0) return Addressables.LoadAssetAsync<T>(assetPath).Task;
 
 			var source = new TaskCompletionSource<T>();
 			var handle = bundles[assetPath[..colinIndex]].LoadAssetAsync<T>(assetPath[(colinIndex + 1)..]);

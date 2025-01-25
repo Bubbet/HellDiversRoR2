@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 67242027
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: helldivers
+      Dependencies: {}

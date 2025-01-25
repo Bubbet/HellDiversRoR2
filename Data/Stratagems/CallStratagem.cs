@@ -26,11 +26,13 @@ namespace HellDiver.Data.Stratagems
 		{
 			base.FixedUpdate();
 
-			if (isAuthority && !IsKeyDownAuthority())
+			if (!isAuthority) return;
+			if (!IsKeyDownAuthority())
 			{
 				outer.SetNextStateToMain();
 				return;
 			}
+
 
 			if (!CallStratagem.useExtraSkillsForStratagemCalling.Value) HandleMoveVector();
 
@@ -85,12 +87,13 @@ namespace HellDiver.Data.Stratagems
 		{
 			dialedInputs.Add(input);
 			_lastDialedInput = input;
-			if (_hellDiverBehavior.stratagemSkills.Any(x => x.stratagem.inputs.SequenceContains(dialedInputs)))
+			if (_hellDiverBehavior.stratagemSkills.Any(x => x.slot.stock > 0 && x.stratagem.inputs.SequenceContains(dialedInputs)))
 			{
 				log.LogInfo("Dialed " + input);
 				Util.PlaySound("StratDialSound", gameObject);
 				return;
 			}
+
 			log.LogInfo("Cleared dialing, invalid sequence.");
 			dialedInputs.Clear();
 		}
